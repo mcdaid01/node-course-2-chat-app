@@ -8,8 +8,13 @@
   },
   "devDependencies": {},
   "scripts": {
+    "start":"node server/server.js",
+
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "engines":{
+    "node":"8.0.0"
+  },
+  "author": "mcdaid01@gmail.com",
   "license": "ISC"
 }

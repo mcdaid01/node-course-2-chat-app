@@ -15,6 +15,20 @@ const io = socketIO(server);
 io.on("connection",(socket)=>{
     console.log("new user connected");
 
+    socket.emit("newMessage",{ // to the new user
+        from:"admin",
+        text:"welcome to the chat app"
+    });
+
+    socket.broadcast.emit("newMessage",{ // broadcast.emit goes to everyone but the sender
+        from:"admin",
+        text:"a new user joined",
+        createdAt:Date.now()
+    });
+
+
+    
+
     socket.on("disconnect",()=>{
         console.log("user was disconnected");
     });
@@ -28,7 +42,8 @@ io.on("connection",(socket)=>{
     
     socket.on("createMessage",(message)=>{
         console.log("createMessage",message);
-        io.emit("newMessage",{
+    
+        socket.broadcast.emit("newMessage",{ // broadcast.emit goes to everyone but the sender
             from:message.from,
             text:message.text,
             createdAt:Date.now()

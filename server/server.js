@@ -29,10 +29,13 @@ io.on("connection",(socket)=>{
 
     
     
-    socket.on("createMessage",(message)=>{
+    socket.on("createMessage",(message,callback)=>{
         console.log("createMessage",message);
+        console.log("server callback",typeof(callback));
     
-        socket.broadcast.emit("newMessage",generateMessage(message.from,message.text));
+        io.emit("newMessage",generateMessage(message.from,message.text));
+        //callback("this is from the server");// sends back to front end for acknowledgement
+        //socket.broadcast.emit("newMessage",generateMessage(message.from,message.text));
 
     });
 

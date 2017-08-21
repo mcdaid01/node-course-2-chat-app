@@ -3,11 +3,6 @@
 const socket = io();
 socket.on("connect",()=>{
     console.log("connected to server");
-    
-    socket.emit("createMessage",{
-        text:"can we meet at six",
-        from:"Mike"     
-    })
 });
 
 socket.on("disconnect",()=>{
@@ -15,5 +10,19 @@ socket.on("disconnect",()=>{
 });
 
 socket.on("newMessage",(message)=>{
-    console.log("newMessage",message);    
+    console.log("newMessage",message);
+    $("<li>").text(`${message.from} : ${message.text}`).appendTo("#messages");  
+});
+
+
+
+$("#message-form").on("submit",(evt)=>{
+    evt.preventDefault();
+
+    socket.emit("createMessage",{
+        from:"user",
+        text: $("input[name='message']").val()
+    },(evt)=>{
+        console.log("callback",evt);
+    });
 });

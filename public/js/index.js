@@ -14,6 +14,16 @@ socket.on("newMessage",(message)=>{
     $("<li>").text(`${message.from} : ${message.text}`).appendTo("#messages");  
 });
 
+socket.on("newLocationMessage",(message)=>{
+    console.log("newLocationMessage",message);
+   $("<li>").appendTo("#messages").append(
+       $("<a>")
+        .attr({
+            "href":message.url,
+            target:"blank"
+        }).html(message.from+":")
+    );  
+});
 
 
 $("#message-form").on("submit",(evt)=>{
@@ -25,4 +35,22 @@ $("#message-form").on("submit",(evt)=>{
     },(evt)=>{
         console.log("callback",evt);
     });
+});
+
+
+$("#send-location").on("click",()=>{
+    console.log("clicked");
+    if (!navigator.geolocation)
+        return alert("geolocation not available");
+        
+    navigator.geolocation.getCurrentPosition((position)=>{
+        console.log("position",position);
+        socket.emit("createLocationMesssage",{
+            latitude:position.coords.latitude,
+            longitude:position.coords.longitude
+        });
+    },
+    ()=>{
+        alert("unable to fetch position");
+    })
 });

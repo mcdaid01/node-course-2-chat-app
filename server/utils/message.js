@@ -5,5 +5,14 @@ const generateMessage = (from, text) => {
       createdAt: Date.now()
     };
   };
-  
-  module.exports = {generateMessage};
+
+  const generateLocationMessage = (from,latitude,longitude )=>{
+    return {
+        from,
+        url:"https://google.com/maps?q="+latitude+","+longitude,
+        createdAt: Date.now()
+      };
+    
+  };
+
+  module.exports = {generateMessage,generateLocationMessage};

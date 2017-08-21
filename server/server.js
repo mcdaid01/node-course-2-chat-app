@@ -3,7 +3,7 @@ const path = require("path"); // makes gets rid of ../ jumping up and down direc
 const http = require("http");
 const socketIO = require("socket.io");
 
-const {generateMessage} = require("./utils/message");
+const {generateMessage,generateLocationMessage} = require("./utils/message");
 
 const publicPath = path.join(__dirname,"../public");
 const port = process.env.PORT || 3000;
@@ -23,12 +23,6 @@ io.on("connection",(socket)=>{
     socket.emit("newMessage", generateMessage("admin","welcome to the chat app"));
     socket.broadcast.emit("newMessage", generateMessage("admin","a new user joined."));
 
-    socket.on("disconnect",()=>{
-        console.log("user was disconnected");
-    });
-
-    
-    
     socket.on("createMessage",(message,callback)=>{
         console.log("createMessage",message);
         console.log("server callback",typeof(callback));
@@ -39,7 +33,15 @@ io.on("connection",(socket)=>{
 
     });
 
+    socket.on("createLocationMesssage",(coords)=>{
+        console.log(coords);
+        io.emit("newLocationMessage",generateLocationMessage("Admin",coords.latitude,coords.longitude));
+
+    });
     
+    socket.on("disconnect",()=>{
+        console.log("user was disconnected");
+    });
 });
 
 

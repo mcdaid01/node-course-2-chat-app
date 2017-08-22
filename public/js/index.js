@@ -1,7 +1,5 @@
 /* Re course avoids arrow functions on client */
 
-console.log("something wrong in clearing the text, the callback does not seem to file. Checked the course version it works. COuld be a "
-+"a difference in package versions. More likely a typo.");
 
 const socket = io();
 socket.on("connect",()=>{
@@ -14,17 +12,20 @@ socket.on("disconnect",()=>{
 
 socket.on("newMessage",(message)=>{
     console.log("newMessage",message);
-    $("<li>").text(`${message.from} : ${message.text}`).appendTo("#messages");  
+    const formattedTime = moment(message.createdAt).format("h:mm a");
+    $("<li>").text(`${message.from} ${formattedTime} : ${message.text}`).appendTo("#messages");  
 });
 
 socket.on("newLocationMessage",(message)=>{
     console.log("newLocationMessage",message);
+
+    const formattedTime = moment(message.createdAt).format("h:mm a");
    $("<li>").appendTo("#messages").append(
        $("<a>")
         .attr({
             "href":message.url,
             target:"blank"
-        }).html(message.from+":")
+        }).html( message.from+" "+formattedTime+" Current Location")
     );  
 });
 

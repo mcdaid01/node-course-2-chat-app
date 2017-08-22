@@ -11,39 +11,30 @@ socket.on("disconnect",()=>{
 });
 
 socket.on("newMessage",(message)=>{
-    console.log("newMessage",message);
     const formattedTime = moment(message.createdAt).format("h:mm a");
-    $("<li>").text(`${message.from} ${formattedTime} : ${message.text}`).appendTo("#messages");  
+    const template = $("#message-template").html();
+    const html = Mustache.render(template,{
+        text:message.text,
+        from:message.from,
+        createdAt:formattedTime
+    });
+
+    $("#messages").append(html);  
 });
 
 socket.on("newLocationMessage",(message)=>{
-    console.log("newLocationMessage",message);
-
+    
     const formattedTime = moment(message.createdAt).format("h:mm a");
-   $("<li>").appendTo("#messages").append(
-       $("<a>")
-        .attr({
-            "href":message.url,
-            target:"blank"
-        }).html( message.from+" "+formattedTime+" Current Location")
-    );  
+    const template = $("#location-message-template").html();
+    const html = Mustache.render(template,{
+        url:message.url,
+        from:message.from,
+        createdAt:formattedTime
+    });
+    $("#messages").append(html);
 });
 
-
-/*$("#message-form").on("submit",(evt)=>{
-    evt.preventDefault();
-    let $input=$("input[name='message']");
-
-    socket.emit("createMessage",{
-        from:"user",
-        text: $input.val()
-    },(evt)=>{
-        console.log("callback",evt);
-        $input.val("");
-    });
-});*/
-
-jQuery('#message-form').on('submit', function (e) {
+$('#message-form').on('submit', function (e) {
     e.preventDefault();
   
     var messageTextbox = jQuery('[name=message]');

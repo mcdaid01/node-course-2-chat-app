@@ -23,15 +23,11 @@ io.on("connection",(socket)=>{
     socket.emit("newMessage", generateMessage("admin","welcome to the chat app"));
     socket.broadcast.emit("newMessage", generateMessage("admin","a new user joined."));
 
-    socket.on("createMessage",(message,callback)=>{
-        console.log("createMessage",message);
-        console.log("server callback",typeof(callback));
-    
-        io.emit("newMessage",generateMessage(message.from,message.text));
-        //callback("this is from the server");// sends back to front end for acknowledgement
-        //socket.broadcast.emit("newMessage",generateMessage(message.from,message.text));
-
-    });
+    socket.on('createMessage', (message, callback) => {
+        console.log('createMessage', message);
+        io.emit('newMessage', generateMessage(message.from, message.text));
+        callback(); // does not seem to work
+      });
 
     socket.on("createLocationMesssage",(coords)=>{
         console.log(coords);
